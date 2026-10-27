@@ -1,0 +1,29 @@
+{
+  "image_root": "data/images",
+  "raw_root": "data/nys",
+  "annotations": "data/annotations.jsonl",
+  "train_split": "data/splits/train.json",
+  "val_split": "data/splits/val.json",
+
+  "clip": "openai/clip-vit-base-patch16",
+  "temperature": 0.10,
+  "lambda_is": 0.1111111111111111,
+  "lambda_st": 0.8888888888888888,
+
+  "epochs": 1200,
+  "batch_size": 512,
+  "eval_batch_size": 64,
+  "gradient_checkpointing": false,
+  "workers": 16,
+  "lr": 2e-5,
+  "weight_decay": 0.01,
+  "betas": [0.9, 0.98],
+  "adam_eps": 1e-6,
+  "warmup_fraction": 0.025,
+  "cooldown_fraction": 0.4,
+  "ema_decay": 0.999,
+  "evaluations": 120,
+  "seed": 44,
+  "output_dir": "runs/scent",
+  "wandb_project": null
+}
