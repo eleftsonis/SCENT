@@ -1,10 +1,17 @@
 """SCENT model: smell transformer with two projection heads aligned to CLIP image and text spaces."""
+import os
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from transformers import CLIPModel, CLIPTokenizer
+from transformers.utils import logging as hf_logging
 
 CLIP_NAME = "openai/clip-vit-base-patch16"
+
+os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")  # the tokenizer runs in the main process before DataLoader workers fork
+hf_logging.set_verbosity_error()  # transformers >= 5 otherwise reports CLIP's unused position_ids buffers on every load
+hf_logging.disable_progress_bar()
 
 
 class SmellEncoder(nn.Module):
@@ -16,7 +23,7 @@ class SmellEncoder(nn.Module):
         self.pos = nn.Parameter(torch.randn(1, n_steps, dim) * 0.02)
         layer = nn.TransformerEncoderLayer(dim, heads, dim * 4, dropout, activation="gelu",
                                            batch_first=True, norm_first=True)
-        self.transformer = nn.TransformerEncoder(layer, layers, norm=nn.LayerNorm(dim))
+        self.transformer = nn.TransformerEncoder(layer, layers, norm=nn.LayerNorm(dim), enable_nested_tensor=False)
         self.output_proj = nn.Sequential(nn.LayerNorm(dim), nn.Linear(dim, out_dim))
         for m in self.modules():
             if isinstance(m, nn.Linear):
