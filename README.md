@@ -63,13 +63,13 @@ Shipped with the repository:
 - `data/annotations.jsonl` - one record per sample: VLM-generated `object`, `background` (scene context) and
   `smells` (plausible ambient smells), plus closed-set `item` / `environment` labels used only for
   probing. Generated with Qwen3-VL-30B-A3B-Instruct.
-- `data/splits/{train,val}.json` — the sample ids of the training and validation splits used in the paper.
+- `data/splits/{train,val}.json` - the training and validation splits used in the paper. The public release of the New York Smells splits postdates the paper, so we use our own split.
 
 Sample ids are `<session>_<index>`, matching `<session>/rgb/<index>_rgb.png` in the public tree.
 
 ## Evaluate the released model
 
-Download `scent.pt` from the releases page, then:
+Download [`scent.pt`](https://github.com/eleftsonis/SCENT/releases/tag/v1.0), then:
 
 ```bash
 python scripts/evaluate.py --checkpoint scent.pt
@@ -118,3 +118,4 @@ Set `"wandb_project"` in the config to log to Weights & Biases.
 
 Code: MIT (see `LICENSE`). The annotation and split files in `data/` are derived from the
 [New York Smells](https://smell.cs.columbia.edu/) dataset and are shared under its CC BY 4.0 licence; the released weights are CC BY 4.0.
+The vision encoder is fine-tuned from OpenAI's [CLIP](https://github.com/openai/CLIP) ViT-B/16 (MIT, Copyright (c) 2021 OpenAI).
